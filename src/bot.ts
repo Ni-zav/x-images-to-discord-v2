@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { registerCommands, handleInteraction } from './commands';
 import { startScheduler } from './scheduler';
 import { info, error } from './logger';
+import http from 'http';
 
 dotenv.config();
 
@@ -43,5 +44,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
   }
 });
+
+http.createServer((_, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Bot is running!');
+}).listen(3001);
 
 client.login(token);
