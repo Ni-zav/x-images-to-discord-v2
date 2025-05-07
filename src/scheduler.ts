@@ -4,8 +4,8 @@ import { getLatestImageTweet } from './twitter';
 import { info, warn } from './logger';
 
 export function startScheduler(notify: (channelId: string, message: string | { content: string; embeds: any[] }) => Promise<void>) {
-  // Run every 20 minutes (at minute 0, 20, 40)
-  cron.schedule('0,20,40 * * * *', async () => {
+  // Run once per day at 7am Asia/Jakarta time
+  cron.schedule('0 7 * * *', async () => {
     info('Scheduler tick: checking subscriptions');
     const subs = getAllSubscriptions();
     for (const sub of subs) {
@@ -34,5 +34,5 @@ export function startScheduler(notify: (channelId: string, message: string | { c
         warn(`Scheduler error for @${sub.twitterUsername} in channel ${sub.channelId}`, e);
       }
     }
-  });
+  }, { timezone: 'Asia/Jakarta' });
 }
